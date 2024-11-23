@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Анализ текста по фреймворку AIDA</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background: #fff;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Анализ текста по фреймворку AIDA</h1>
+<textarea id="userInput" rows="5" placeholder="Введите текст для анализа..." style="width: 100%;"></textarea>
+<br>
+<button onclick="analyzeText()">Анализировать текст</button>
+
+<div id="result"></div>
+
+<script>
+    function analyzeText() {
+        const userInput = document.getElementById('userInput').value.toLowerCase();
+        const aidaElements = {
+            attention: ['внимание', 'представляем', 'новинка', 'супер', 'эксклюзив'],
+            interest: ['интересно', 'уникальный', 'особенный', 'функции', 'преимущества'],
+            desire: ['хочешь', 'мечтаешь', 'представь', 'получи', 'подарок'],
+            action: ['купить', 'заказать', 'действуй', 'сделай', 'получи']
+        };
+
+        const aidaScores = {
+            attention: aidaElements.attention.filter(word => userInput.includes(word)).length,
+            interest: aidaElements.interest.filter(word => userInput.includes(word)).length,
+            desire: aidaElements.desire.filter(word => userInput.includes(word)).length,
+            action: aidaElements.action.filter(word => userInput.includes(word)).length
+        };
+
+        const resultDiv = document.getElementById('result');
+        resultDiv.innerHTML = ''; // Очистка предыдущего результата
+
+        // Оценка текста по фреймворку AIDA
+        let totalScore = Object.values(aidaScores).reduce((sum, score) => sum + score, 0);
+        let feedback = '';
+
+        if (totalScore === 0) {
+            feedback = 'Текст не соответствует фреймворку AIDA. Рекомендуем добавить ключевые элементы.';
+        } else {
+            feedback += 'Текст соответствует фреймворку AIDA следующим образом:<br>';
+            if (aidaScores.attention > 0) {
+                feedback += `- Внимание: ${aidaScores.attention} элемента(ов)<br>`;
+            }
+            if (aidaScores.interest > 0) {
+                feedback += `- Интерес: ${aidaScores.interest} элемента(ов)<br>`;
+            }
+            if (aidaScores.desire > 0) {
+                feedback += `- Желание: ${aidaScores.desire} элемента(ов)<br>`;
+            }
+            if (aidaScores.action > 0) {
+                feedback += `- Действие: ${aidaScores.action} элемента(ов)<br>`;
+            }
+            feedback += `Общая оценка: ${totalScore} из 4 возможных.<br>`;
+        }
+
+        resultDiv.innerHTML = feedback;
+    }
+</script>
+
+</body>
+</html>
